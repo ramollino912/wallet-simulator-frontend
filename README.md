@@ -1,6 +1,6 @@
 # 🏦 Wallet TIC - Frontend
 
-Frontend de Next.js 14 para la aplicación Wallet TIC, conectado con la API backend en producción.
+Frontend de Next.js 14 para la aplicación Wallet TIC, conectado con la API backend en producción. 
 
 ## 🚀 Setup Completado
 
