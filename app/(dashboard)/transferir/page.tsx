@@ -83,7 +83,7 @@ export default function TransferirPage() {
 
     console.log('=== INICIO TRANSFERENCIA ===');
     console.log('Usuario seleccionado:', selectedUser);
-    console.log('Amount:', amount);
+    console.log('Amount (string):', amount);
     console.log('Description:', description);
 
     if (!selectedUser) {
@@ -92,7 +92,7 @@ export default function TransferirPage() {
     }
 
     const monto = parseFloat(amount);
-    console.log('Monto parseado:', monto);
+    console.log('Monto parseado:', monto, 'Type:', typeof monto);
     
     if (isNaN(monto) || monto <= 0) {
       setError('Ingresa un monto válido');
@@ -103,7 +103,7 @@ export default function TransferirPage() {
       ? user.saldo 
       : Number(user?.saldo || 0);
 
-    console.log('Saldo actual:', saldoActual);
+    console.log('Saldo actual:', saldoActual, 'Type:', typeof saldoActual);
 
     if (monto > saldoActual) {
       setError('Saldo insuficiente');
@@ -114,20 +114,55 @@ export default function TransferirPage() {
     setError('');
 
     try {
+      // IMPORTANTE: Verificar que no se esté transfiriendo a sí mismo
+      if (user && selectedUser.id === user.id) {
+        setError('No puedes transferir dinero a ti mismo');
+        setIsTransferring(false);
+        return;
+      }
+      
+      // Asegurar que todos los valores sean del tipo correcto
+      const destinatarioId = parseInt(selectedUser.id.toString(), 10);
+      const montoFinal = parseFloat(monto.toFixed(2));
+      
+      // La descripcion es OBLIGATORIA según el backend
+      const descripcionFinal = description?.trim() || 'Transferencia';
+      
+      // IMPORTANTE: El backend espera camelCase (destinatarioId), no snake_case (destinatario_id)
       const payload = {
-        destinatario_id: selectedUser.id,
-        monto: monto,
-        descripcion: description || 'Transferencia'
+        destinatarioId: destinatarioId,  // ✅ camelCase
+        monto: montoFinal,
+        descripcion: descripcionFinal
       };
       
-      console.log('Payload a enviar:', payload);
-      console.log('Tipos:', {
-        destinatario_id: typeof payload.destinatario_id,
-        monto: typeof payload.monto,
-        descripcion: typeof payload.descripcion
+      console.log('=== INICIO DEBUG TRANSFERENCIA ===');
+      console.log('Usuario logueado ID:', user?.id, 'Type:', typeof user?.id);
+      console.log('Destinatario seleccionado ID:', selectedUser.id, 'Type:', typeof selectedUser.id);
+      console.log('¿Son diferentes?', user?.id !== selectedUser.id);
+      console.log('=== PAYLOAD FINAL ===');
+      console.log('Payload:', JSON.stringify(payload, null, 2));
+      console.log('Tipos detallados:', {
+        destinatarioId: {
+          value: payload.destinatarioId,
+          type: typeof payload.destinatarioId,
+          isInteger: Number.isInteger(payload.destinatarioId)
+        },
+        monto: {
+          value: payload.monto,
+          type: typeof payload.monto,
+          isFinite: Number.isFinite(payload.monto)
+        },
+        descripcion: {
+          value: payload.descripcion,
+          type: typeof payload.descripcion,
+          length: payload.descripcion.length
+        }
       });
       
+      console.log('Enviando POST a /transferir...');
       const response = await api.post('/transferir', payload);
+      console.log('=== RESPUESTA EXITOSA ===');
+      console.log('Response:', response.data);
       
       console.log('Respuesta de transferencia:', response.data);
 
@@ -147,15 +182,30 @@ export default function TransferirPage() {
         }, 2000);
       }
     } catch (error: any) {
-      console.error('Error al transferir:', error);
-      console.error('Error completo:', JSON.stringify(error, null, 2));
+      console.error('=== ERROR EN TRANSFERENCIA ===');
+      console.error('Error completo:', error);
+      console.error('Error.response:', error.response);
+      console.error('Error.response.data:', error.response?.data);
+      console.error('Error.data:', error.data);
+      console.error('Error.message:', error.message);
       
-      // El interceptor de axios reformatea el error
-      const errorMsg = error.data?.error 
-        || error.data?.message 
-        || error.message
-        || 'Error al realizar la transferencia';
+      // El backend devuelve el error en error.data (después del interceptor)
+      // pero también puede estar en error.response.data
+      let errorMsg = 'Error al realizar la transferencia';
       
+      if (error.data?.error) {
+        errorMsg = error.data.error;
+      } else if (error.data?.message) {
+        errorMsg = error.data.message;
+      } else if (error.response?.data?.error) {
+        errorMsg = error.response.data.error;
+      } else if (error.response?.data?.message) {
+        errorMsg = error.response.data.message;
+      } else if (error.message) {
+        errorMsg = error.message;
+      }
+      
+      console.error('Mensaje de error final:', errorMsg);
       setError(errorMsg);
     } finally {
       setIsTransferring(false);
