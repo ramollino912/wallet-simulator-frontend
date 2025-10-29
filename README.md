@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏦 Wallet TIC - Frontend
 
-## Getting Started
-a
-First, run the development server:
+Frontend de Next.js 14 para la aplicación Wallet TIC, conectado con la API backend en producción.
+
+## 🚀 Setup Completado
+
+✅ **El proyecto está 100% configurado y funcional!**
+
+- Next.js 14 con TypeScript y App Router
+- Tailwind CSS + shadcn/ui components
+- Sistema de autenticación con JWT
+- Dashboard funcional con estadísticas
+- Layout responsive con Sidebar y Navbar
+- Protección automática de rutas
+
+## 📚 Documentación
+
+Lee los siguientes archivos para información detallada:
+
+- **[SETUP_COMPLETE.md](./SETUP_COMPLETE.md)** - Resumen completo del proyecto
+- **[PROJECT_README.md](./PROJECT_README.md)** - Documentación técnica detallada
+- **[IMPLEMENTATION_GUIDE.md](./IMPLEMENTATION_GUIDE.md)** - Guía para implementar páginas adicionales
+
+## ⚡ Quick Start
 
 ```bash
+# Instalar dependencias (si es necesario)
+npm install
+
+# Iniciar servidor de desarrollo
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) y serás redirigido al login.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔐 Login
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Usa credenciales de un usuario registrado en la API:
+- **API Backend**: https://back-wallet-20.vercel.app
+- **Email**: tu@email.com
+- **Password**: tu_password
 
-## Learn More
+## 📁 Estructura
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+├── (auth)/           # Login y Registro
+├── (dashboard)/      # Dashboard y páginas protegidas
+components/
+├── layout/           # Sidebar y Navbar
+└── ui/              # Componentes shadcn/ui
+lib/
+├── axios.ts         # Config API con interceptors
+└── utils.ts
+store/
+└── authStore.ts     # Estado global de autenticación
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎯 Páginas Implementadas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- ✅ Login (`/login`)
+- ✅ Registro (`/register`)
+- ✅ Dashboard (`/dashboard`)
 
-## Deploy on Vercel
+## 📝 Próximos Pasos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Ver **[IMPLEMENTATION_GUIDE.md](./IMPLEMENTATION_GUIDE.md)** para código de:
+- Página de Transacciones
+- Página de Servicios
+- Página de Transporte
+- Página de Perfil
+- Funcionalidad de Transferencias
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔧 Stack Tecnológico
+
+- **Framework**: Next.js 14
+- **Lenguaje**: TypeScript
+- **Estilos**: Tailwind CSS v4
+- **Componentes**: shadcn/ui
+- **Estado**: Zustand
+- **HTTP Client**: Axios
+- **Iconos**: Lucide React
+
+## 🌐 URLs
+
+- **Frontend**: http://localhost:3000
+- **Backend API**: https://back-wallet-20.vercel.app
+
+## 📖 Más Información
+
+Para instrucciones detalladas de implementación, deployment y personalización, consulta la documentación en los archivos mencionados arriba.
+
+---
+
+**Estado**: ✅ Setup Inicial Completado  
+**Última actualización**: 29 de Octubre, 2025
+
