@@ -20,7 +20,7 @@ interface AuthState {
   // Acciones
   login: (email: string, password: string) => Promise<void>;
   loginWithGoogle: (token: string) => Promise<void>;
-  register: (nombre: string, apellido: string, email: string, password: string) => Promise<void>;
+    register: (nombre: string, apellido: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   clearError: () => void;
   updateUser: (user: Partial<User>) => void;
@@ -53,13 +53,25 @@ export const useAuthStore = create<AuthState>()(
             error: null,
           });
         } catch (error: any) {
-          const errorMessage = error.message || 'Error al iniciar sesión';
+          console.error('Error completo al iniciar sesión:', error);
+          
+          let errorMessage = 'Error al iniciar sesión';
+          
+          // Extraer mensaje de error más específico
+          if (error.data?.message) {
+            errorMessage = error.data.message;
+          } else if (error.data?.error) {
+            errorMessage = error.data.error;
+          } else if (error.message) {
+            errorMessage = error.message;
+          }
+          
           set({ 
             error: errorMessage,
             isLoading: false,
             isAuthenticated: false 
           });
-          throw error;
+          throw new Error(errorMessage);
         }
       },
 
@@ -112,13 +124,25 @@ export const useAuthStore = create<AuthState>()(
             error: null,
           });
         } catch (error: any) {
-          const errorMessage = error.message || 'Error al registrar usuario';
+          console.error('Error completo al registrar:', error);
+          
+          let errorMessage = 'Error al registrar usuario';
+          
+          // Extraer mensaje de error más específico
+          if (error.data?.message) {
+            errorMessage = error.data.message;
+          } else if (error.data?.error) {
+            errorMessage = error.data.error;
+          } else if (error.message) {
+            errorMessage = error.message;
+          }
+          
           set({ 
             error: errorMessage,
             isLoading: false,
             isAuthenticated: false 
           });
-          throw error;
+          throw new Error(errorMessage);
         }
       },
 
@@ -138,9 +162,25 @@ export const useAuthStore = create<AuthState>()(
       },
 
       updateUser: (userData: Partial<User>) => {
-        set((state) => ({
-          user: state.user ? { ...state.user, ...userData } : null,
-        }));
+        console.log('UpdateUser llamado con:', userData);
+        console.log('Estado anterior:', useAuthStore.getState().user);
+        
+        set((state) => {
+          if (!state.user) {
+            console.log('No hay usuario en el estado');
+            return state;
+          }
+          
+          const updatedUser = { ...state.user, ...userData };
+          console.log('Usuario anterior:', state.user);
+          console.log('Usuario nuevo:', updatedUser);
+          
+          return {
+            user: updatedUser,
+          };
+        });
+        
+        console.log('Estado después:', useAuthStore.getState().user);
       },
     }),
     {
