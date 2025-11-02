@@ -53,8 +53,6 @@ export const useAuthStore = create<AuthState>()(
             error: null,
           });
         } catch (error: any) {
-          console.error('Error completo al iniciar sesión:', error);
-          
           let errorMessage = 'Error al iniciar sesión';
           
           // Extraer mensaje de error más específico
@@ -124,8 +122,6 @@ export const useAuthStore = create<AuthState>()(
             error: null,
           });
         } catch (error: any) {
-          console.error('Error completo al registrar:', error);
-          
           let errorMessage = 'Error al registrar usuario';
           
           // Extraer mensaje de error más específico
@@ -162,25 +158,17 @@ export const useAuthStore = create<AuthState>()(
       },
 
       updateUser: (userData: Partial<User>) => {
-        console.log('UpdateUser llamado con:', userData);
-        console.log('Estado anterior:', useAuthStore.getState().user);
-        
         set((state) => {
           if (!state.user) {
-            console.log('No hay usuario en el estado');
             return state;
           }
           
           const updatedUser = { ...state.user, ...userData };
-          console.log('Usuario anterior:', state.user);
-          console.log('Usuario nuevo:', updatedUser);
           
           return {
             user: updatedUser,
           };
         });
-        
-        console.log('Estado después:', useAuthStore.getState().user);
       },
     }),
     {

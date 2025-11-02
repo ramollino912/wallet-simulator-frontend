@@ -41,7 +41,7 @@ export default function TransferirPage() {
           updateUser({ saldo });
         }
       } catch (error) {
-        console.error('Error al obtener saldo:', error);
+        // Error silencioso en producción
       }
     };
 

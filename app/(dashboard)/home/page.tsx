@@ -24,11 +24,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchSaldo = async () => {
       try {
-        console.log('Fetching saldo from backend...');
         const response = await api.get('/saldo');
-        console.log('Response de saldo:', response.data);
-        console.log('response.data.success:', response.data.success);
-        console.log('response.data.saldo:', response.data.saldo);
         
         // El backend devuelve {saldo: "410.96"} sin el campo success
         if (response.data && response.data.saldo) {
@@ -37,22 +33,11 @@ export default function HomePage() {
             ? parseFloat(response.data.saldo) 
             : response.data.saldo;
           
-          console.log('Actualizando saldo a:', saldo);
-          console.log('Tipo de saldo:', typeof saldo);
-          console.log('updateUser function:', updateUser);
-          
           // Actualizar usando set completo para asegurar que se guarde
           updateUser({ saldo: saldo });
-          
-          // Log para verificar que se actualizó
-          setTimeout(() => {
-            console.log('Usuario después de update:', useAuthStore.getState().user);
-          }, 100);
-        } else {
-          console.log('No hay saldo en la respuesta');
         }
       } catch (error) {
-        console.error('Error al obtener saldo:', error);
+        // Error silencioso en producción
       } finally {
         setIsLoading(false);
       }
@@ -97,9 +82,6 @@ export default function HomePage() {
   const saldo = typeof user?.saldo === 'number' 
     ? user.saldo.toFixed(2) 
     : Number(user?.saldo || 0).toFixed(2);
-
-  console.log('Usuario actual en Home:', user);
-  console.log('Saldo calculado:', saldo);
 
   if (isLoading) {
     return (

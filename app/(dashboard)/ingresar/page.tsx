@@ -33,7 +33,7 @@ export default function IngresarPage() {
           updateUser({ saldo });
         }
       } catch (error) {
-        console.error('Error al obtener saldo:', error);
+        // Error silencioso en producción
       }
     };
 
@@ -59,19 +59,13 @@ export default function IngresarPage() {
         monto: montoIngreso
       });
 
-      console.log('Response de recarga:', response.data);
-
       if (response.data.success) {
         // Convertir saldo a número si viene como string
         const nuevoSaldo = typeof response.data.saldoNuevo === 'string'
           ? parseFloat(response.data.saldoNuevo)
           : response.data.saldoNuevo;
         
-        console.log('Nuevo saldo recibido:', nuevoSaldo);
-        
         updateUser({ saldo: nuevoSaldo });
-        
-        console.log('Usuario actualizado en store');
         
         setShowSuccess(true);
         
@@ -81,8 +75,6 @@ export default function IngresarPage() {
         }, 2000);
       }
     } catch (error: any) {
-      console.error('Error al recargar saldo:', error);
-      console.error('Response error:', error.response?.data);
       setError(error.response?.data?.message || 'Error al procesar la recarga');
     } finally {
       setIsLoading(false);

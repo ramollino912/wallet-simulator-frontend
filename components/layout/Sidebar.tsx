@@ -41,12 +41,6 @@ export function Sidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isCollapsed, setIsCollapsed } = useSidebarContext();
 
-  // Log para debug
-  useEffect(() => {
-    console.log('Sidebar - Usuario actualizado:', user);
-    console.log('Sidebar - Saldo:', user?.saldo);
-  }, [user]);
-
   const handleLogout = () => {
     logout();
     window.location.href = '/login';

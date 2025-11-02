@@ -27,7 +27,7 @@ export default function LoginPage() {
       await login(formData.email, formData.password);
       router.push('/home');
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+      // Error manejado por el store
     }
   };
 

@@ -44,7 +44,7 @@ export default function RegisterPage() {
       await register(formData.nombre, formData.apellido, formData.email, formData.password);
       router.push('/home');
     } catch (error) {
-      console.error('Error al registrar:', error);
+      // Error manejado por el store
     }
   };
 
